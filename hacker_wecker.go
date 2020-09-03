@@ -59,12 +59,12 @@ func fetchUrl(url string, channel chan<- fetchResult) {
 	defer resp.Body.Close()
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error getting url %s: %v\n", url, err)
+		speak(fmt.Sprintf("Error getting url %s: %v\n", url, err))
 	} else {
 		content, err := ioutil.ReadAll(resp.Body)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error reading url %s: %v\n", url, err)
+			speak(fmt.Sprintf("Error reading url %s: %v\n", url, err))
 			content = nil
 		}
 
@@ -240,7 +240,7 @@ func main() {
 		feed, err := parser.ParseString(content)
 
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Cannot parse feed from %s: %v\n", url, err)
+			speak(fmt.Sprintf("Cannot parse feed from %s: %v\n", url, err))
 		} else {
 			readFeed(feed, config.Feeds[url])
 			time.Sleep(1 * time.Second)
