@@ -5,5 +5,8 @@
 
 	       "https://blog.golang.org/feed.atom":
 	       { "include": ["Best", "Performance", "Parallel", "Compatible"]}
-	     }
+	     },
+
+    "music": ["/home/basti/Musik/hacker_wecker"],
+    "numberOfTracks": 1
 }

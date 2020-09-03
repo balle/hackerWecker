@@ -4,19 +4,25 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 	"time"
 
+	"github.com/hajimehoshi/go-mp3"
+	"github.com/hajimehoshi/oto"
 	"github.com/mmcdole/gofeed"
 )
 
 type Config struct {
-	Feeds map[string]map[string][]string
+	Feeds          map[string]map[string][]string
+	Music          []string
+	NumberOfTracks int
 }
 
 type fetchResult struct {
@@ -153,6 +159,67 @@ func readFeed(feed *gofeed.Feed, metaData map[string][]string) {
 	fmt.Println()
 }
 
+func playMp3(filename string) {
+	fh, err := os.Open(filename)
+	defer fh.Close()
+
+	if err != nil {
+		speak(fmt.Sprintf("Sorry cannot open %s: %v", filename, err))
+	}
+
+	decoder, err := mp3.NewDecoder(fh)
+
+	if err != nil {
+		speak(fmt.Sprintf("Sorry cannot decode %s: %v", filename, err))
+		return
+	}
+
+	sound, err := oto.NewContext(decoder.SampleRate(), 2, 2, 8192)
+
+	if err != nil {
+		speak(fmt.Sprintf("Sorry create sound interface: %v", err))
+		return
+	}
+
+	defer sound.Close()
+
+	player := sound.NewPlayer()
+	defer player.Close()
+
+	if _, err := io.Copy(player, decoder); err != nil {
+		speak(fmt.Sprintf("Sorry cannot play %s: %v", filename, err))
+		return
+	}
+}
+
+func playMusic(musicDirs []string, numberOfTracks int) {
+	musicFiles := make([]string, 0)
+
+	for i := range musicDirs {
+		fh, err := os.Open(musicDirs[i])
+		defer fh.Close()
+
+		dirList, err := fh.Readdir(-1)
+
+		if err != nil {
+			speak(fmt.Sprintf("Sorry cannot read directory %s: %v", musicDirs[i], err))
+			continue
+		}
+
+		for x := range dirList {
+			musicFiles = append(musicFiles, path.Join(musicDirs[i], dirList[x].Name()))
+		}
+	}
+
+	if len(musicFiles) < numberOfTracks {
+		numberOfTracks = len(musicFiles)
+	}
+
+	for i := 0; i < numberOfTracks; i++ {
+		playMp3(musicFiles[i])
+	}
+}
+
 func main() {
 	configFile := "hacker_wecker.json"
 
@@ -164,7 +231,10 @@ func main() {
 	contents := fetchFeeds(config.Feeds)
 	parser := gofeed.NewParser()
 
-	speak("Good morning. Here are the news of the day.")
+	speak("Good morning, hacker!")
+	playMusic(config.Music, config.NumberOfTracks)
+
+	speak("Here are the news of the day.")
 
 	for url, content := range contents {
 		feed, err := parser.ParseString(content)
