@@ -1,0 +1,9 @@
+{
+    "feeds": { "https://rss.packetstormsecurity.com/files/":
+	       { "include": ["Execution", "injection", "Go", "Python"],
+		   "exclude": ["Security Note", "Advisory"]},
+
+	       "https://blog.golang.org/feed.atom":
+	       { "include": ["Best", "Performance", "Parallel", "Compatible"]}
+	     }
+}
