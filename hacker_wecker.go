@@ -50,6 +50,7 @@ func fetchUrl(url string, channel chan<- fetchResult) {
 	result.Url = url
 
 	resp, err := http.Get(url)
+	defer resp.Body.Close()
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error getting url %s: %v\n", url, err)
@@ -63,8 +64,6 @@ func fetchUrl(url string, channel chan<- fetchResult) {
 
 		result.Content = string(content)
 	}
-
-	resp.Body.Close()
 
 	channel <- result
 }
@@ -123,6 +122,7 @@ func speak(text string) {
 	// Read the feed with help of a TTS tool
 	ttsCmd := exec.Command("/usr/local/bin/espeak", "-a", "120", "-s", "150", "-v", "en-us")
 	stdin, err := ttsCmd.StdinPipe()
+	defer stdin.Close()
 
 	if err != nil {
 		log.Fatalf("Cannot pipe to espeak command: %v", err)
@@ -136,7 +136,6 @@ func speak(text string) {
 
 	fmt.Fprintln(stdin, text)
 	time.Sleep(time.Duration(len(text))*time.Millisecond*100 + 1*time.Second)
-	stdin.Close()
 }
 
 func readFeed(feed *gofeed.Feed, metaData map[string][]string) {
