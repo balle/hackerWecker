@@ -8,5 +8,6 @@
 	     },
 
     "music": ["/home/basti/Musik/hacker_wecker"],
-    "numberOfTracks": 1
+    "numberOfTracks": 3,
+    "shuffle": true
 }

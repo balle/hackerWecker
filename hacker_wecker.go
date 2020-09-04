@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/exec"
@@ -23,6 +24,7 @@ type Config struct {
 	Feeds          map[string]map[string][]string
 	Music          []string
 	NumberOfTracks int
+	Shuffle        bool
 }
 
 type fetchResult struct {
@@ -96,9 +98,9 @@ func fetchFeeds(rssFeeds map[string]map[string][]string) map[string]string {
 }
 
 func filterFeed(text string, metaData map[string][]string) bool {
+	// Check if the feed should be read regarding to the include and exclude filters
 	readFeed := true
 
-	// Check if the feed should be read regarding to the include and exclude filters
 	if metaData["exclude"] != nil {
 		for i := 0; i < len(metaData["exclude"]); i++ {
 			if strings.Contains(strings.ToLower(text), strings.ToLower(metaData["exclude"][i])) {
@@ -145,6 +147,7 @@ func speak(text string) {
 }
 
 func readFeed(feed *gofeed.Feed, metaData map[string][]string) {
+	// Check if a feed should be read regarding to the given metadata and if so read it
 	fmt.Printf("////[ %s\n\n", feed.Title)
 	speak(feed.Title)
 
@@ -159,7 +162,14 @@ func readFeed(feed *gofeed.Feed, metaData map[string][]string) {
 	fmt.Println()
 }
 
+func remove(slice []string, i int) []string {
+	// Remove element from slice of strings without preserving order
+	slice[i] = slice[len(slice)-1]
+	return slice[:len(slice)-1]
+}
+
 func playMp3(filename string) {
+	// Decode mp3 file and send it to the audio device
 	fh, err := os.Open(filename)
 	defer fh.Close()
 
@@ -192,8 +202,9 @@ func playMp3(filename string) {
 	}
 }
 
-func playMusic(musicDirs []string, numberOfTracks int) {
-	musicFiles := make([]string, 0)
+func playMusic(musicDirs []string, numberOfTracks int, shuffle bool) {
+	// Collect music files from given music dirs, if desired play randomly otherwise sequentially numberOfTracks
+	var musicFiles []string
 
 	for i := range musicDirs {
 		fh, err := os.Open(musicDirs[i])
@@ -216,7 +227,19 @@ func playMusic(musicDirs []string, numberOfTracks int) {
 	}
 
 	for i := 0; i < numberOfTracks; i++ {
-		playMp3(musicFiles[i])
+		var playFile string
+
+		if shuffle {
+			rand.Seed(time.Now().Unix())
+			x := rand.Intn(len(musicFiles))
+			playFile = musicFiles[x]
+			musicFiles = remove(musicFiles, x)
+		} else {
+			playFile = musicFiles[i]
+		}
+
+		fmt.Printf("Playing %s\n", playFile)
+		playMp3(playFile)
 	}
 }
 
@@ -232,7 +255,7 @@ func main() {
 	parser := gofeed.NewParser()
 
 	speak("Good morning, hacker!")
-	playMusic(config.Music, config.NumberOfTracks)
+	playMusic(config.Music, config.NumberOfTracks, config.Shuffle)
 
 	speak("Here are the news of the day.")
 
