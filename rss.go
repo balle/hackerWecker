@@ -8,25 +8,19 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func FetchFeeds(rssFeeds map[string]map[string][]string) map[string]string {
+func FetchFeeds(rssFeeds map[string]map[string][]string, outputChan chan<- FetchResult) {
 	// Fetch the contents of all feeds
 	// Return a map of feed url as key and content as value
-	content := make(map[string]string)
-	channel := make(chan fetchResult)
+	inputChan := make(chan FetchResult)
 
 	for url, _ := range rssFeeds {
-		go FetchUrl(url, channel)
+		go FetchUrl(url, inputChan)
 	}
 
 	for i := 0; i < len(rssFeeds); i++ {
-		result := <-channel
-
-		if result.Content != "" {
-			content[result.Url] = result.Content
-		}
+		result := <-inputChan
+		outputChan <- result
 	}
-
-	return content
 }
 
 func ParseFeed(url string, content string) (*gofeed.Feed, error) {

@@ -22,19 +22,24 @@ func main() {
 		log.Fatal("Cannot read %s: %v", configFile, err)
 	}
 
-	contents := hackerWecker.FetchFeeds(config.Feeds)
-
 	hackerWecker.Speak("Good morning, hacker!")
+
+	channel := make(chan hackerWecker.FetchResult)
+	go hackerWecker.FetchFeeds(config.Feeds, channel)
 	hackerWecker.PlayMusic(config.Music, config.NumberOfTracks, config.Shuffle)
 
 	hackerWecker.Speak("Here are the news of the day.")
 
-	for url, content := range contents {
-		feed, err := hackerWecker.ParseFeed(url, content)
+	for i := 0; i < len(config.Feeds); i++ {
+		result := <-channel
 
-		if err == nil {
-			hackerWecker.ReadFeed(feed, config.Feeds[url])
-			time.Sleep(1 * time.Second)
+		if result.Error == nil {
+			feed, err := hackerWecker.ParseFeed(result.Url, result.Content)
+
+			if err == nil {
+				hackerWecker.ReadFeed(feed, config.Feeds[result.Url])
+				time.Sleep(1 * time.Second)
+			}
 		}
 	}
 }
