@@ -19,7 +19,7 @@ func remove(slice []string, i int) []string {
 	return slice[:len(slice)-1]
 }
 
-func PlayMp3(filename string) {
+func playMp3(filename string) {
 	// Decode mp3 file and send it to the audio device
 	fh, err := os.Open(filename)
 	defer fh.Close()
@@ -93,6 +93,6 @@ func PlayMusic(config Config) {
 		}
 
 		fmt.Printf("Playing %s\n", playFile)
-		PlayMp3(playFile)
+		playMp3(playFile)
 	}
 }

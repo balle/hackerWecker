@@ -10,15 +10,15 @@ import (
 	"time"
 )
 
-type FetchResult struct {
+type fetchResult struct {
 	Url     string
 	Content string
 	Error   error
 }
 
-func FetchUrl(url string, channel chan<- FetchResult) {
+func fetchUrl(url string, channel chan<- fetchResult) {
 	// Get url and return fetchResult struct
-	var result FetchResult
+	var result fetchResult
 	result.Url = url
 	client := &http.Client{}
 	rand.Seed(time.Now().Unix() * int64(os.Getpid()) / int64(os.Getppid()))
