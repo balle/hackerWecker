@@ -32,7 +32,7 @@ func FetchFeeds(outputChan chan<- Feed) {
 			result.Url = input.Url
 
 			for _, item := range feed.Items {
-				if filterFeed(item.Title, config.Feeds[input.Url]) {
+				if filterFeed(input.Url, item.Title) {
 					result.Items = append(result.Items, item.Title)
 				}
 			}
@@ -56,25 +56,25 @@ func parseFeed(url string, content string) (*gofeed.Feed, error) {
 	return feed, err
 }
 
-func filterFeed(text string, metaData map[string][]string) bool {
+func filterFeed(url, text string) bool {
 	// Check if the feed should be read regarding to the include and exclude filters
 	readFeed := true
 
-	if metaData["exclude"] != nil {
-		for i := 0; i < len(metaData["exclude"]); i++ {
-			if strings.Contains(strings.ToLower(text), strings.ToLower(metaData["exclude"][i])) {
+	if config.Feeds[url]["exclude"] != nil {
+		for i := 0; i < len(config.Feeds[url]["exclude"]); i++ {
+			if strings.Contains(strings.ToLower(text), strings.ToLower(config.Feeds[url]["exclude"][i])) {
 				readFeed = false
 				break
 			}
 		}
 	}
 
-	if readFeed && metaData["include"] != nil {
+	if readFeed && config.Feeds[url]["include"] != nil {
 		readFeed = false
 
-		for i := 0; i < len(metaData["include"]); i++ {
+		for i := 0; i < len(config.Feeds[url]["include"]); i++ {
 
-			if strings.Contains(strings.ToLower(text), strings.ToLower(metaData["include"][i])) {
+			if strings.Contains(strings.ToLower(text), strings.ToLower(config.Feeds[url]["include"][i])) {
 				readFeed = true
 				break
 			}
