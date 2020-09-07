@@ -29,6 +29,7 @@ func FetchFeeds(config Config, outputChan chan<- FeedResult) {
 		var result FeedResult
 
 		if err == nil {
+			result.Title = feed.Title
 			result.Url = input.Url
 
 			for _, item := range feed.Items {
