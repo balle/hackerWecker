@@ -8,17 +8,36 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func FetchFeeds(rssFeeds map[string]map[string][]string, outputChan chan<- FetchResult) {
+type FeedResult struct {
+	Url   string
+	Title string
+	Items []string
+}
+
+func FetchFeeds(config Config, outputChan chan<- FeedResult) {
 	// Fetch the contents of all feeds
 	// Return a map of feed url as key and content as value
 	inputChan := make(chan FetchResult)
 
-	for url, _ := range rssFeeds {
+	for url, _ := range config.Feeds {
 		go FetchUrl(url, inputChan)
 	}
 
-	for i := 0; i < len(rssFeeds); i++ {
-		result := <-inputChan
+	for i := 0; i < len(config.Feeds); i++ {
+		input := <-inputChan
+		feed, err := ParseFeed(input.Url, input.Content)
+		var result FeedResult
+
+		if err == nil {
+			result.Url = input.Url
+
+			for _, item := range feed.Items {
+				if FilterFeed(item.Title, config.Feeds[input.Url]) {
+					result.Items = append(result.Items, item.Title)
+				}
+			}
+		}
+
 		outputChan <- result
 	}
 }
@@ -65,15 +84,15 @@ func FilterFeed(text string, metaData map[string][]string) bool {
 	return readFeed
 }
 
-func ReadFeed(feed *gofeed.Feed, metaData map[string][]string) {
+func ReadFeed(feed FeedResult, metaData map[string][]string) {
 	// Check if a feed should be read regarding to the given metadata and if so read it
 	fmt.Printf("////[ %s\n\n", feed.Title)
 	Speak(feed.Title)
 
 	for _, item := range feed.Items {
-		if FilterFeed(item.Title, metaData) {
-			fmt.Printf("Speak %s\n", item.Title)
-			Speak(item.Title)
+		if FilterFeed(item, metaData) {
+			fmt.Printf("Speak %s\n", item)
+			Speak(item)
 		}
 
 	}
