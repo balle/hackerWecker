@@ -15,8 +15,7 @@ type FeedResult struct {
 }
 
 func FetchFeeds(config Config, outputChan chan<- FeedResult) {
-	// Fetch the contents of all feeds
-	// Return a map of feed url as key and content as value
+	// Fetch the contents of all feeds, parse and filter them
 	inputChan := make(chan FetchResult)
 
 	for url, _ := range config.Feeds {
@@ -44,7 +43,7 @@ func FetchFeeds(config Config, outputChan chan<- FeedResult) {
 }
 
 func ParseFeed(url string, content string) (*gofeed.Feed, error) {
-	// Parse an RSS feed
+	// Parse an RSS or Atom feed
 	parser := gofeed.NewParser()
 
 	feed, err := parser.ParseString(content)
@@ -85,17 +84,14 @@ func FilterFeed(text string, metaData map[string][]string) bool {
 	return readFeed
 }
 
-func ReadFeed(feed FeedResult, metaData map[string][]string) {
-	// Check if a feed should be read regarding to the given metadata and if so read it
+func ReadFeed(feed FeedResult) {
+	// Read all feed items
 	fmt.Printf("////[ %s\n\n", feed.Title)
 	Speak(feed.Title)
 
 	for _, item := range feed.Items {
-		if FilterFeed(item, metaData) {
-			fmt.Printf("Speak %s\n", item)
-			Speak(item)
-		}
-
+		fmt.Printf("Speak %s\n", item)
+		Speak(item)
 	}
 
 	fmt.Println()

@@ -33,7 +33,7 @@ func main() {
 	for i := 0; i < len(config.Feeds); i++ {
 		feed := <-channel
 
-		hackerWecker.ReadFeed(feed, config.Feeds[feed.Url])
+		hackerWecker.ReadFeed(feed)
 		time.Sleep(1 * time.Second)
 	}
 }
