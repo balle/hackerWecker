@@ -19,7 +19,7 @@ func main() {
 	config, err := hackerWecker.ReadConfig(configFile)
 
 	if err != nil {
-		log.Fatal("Cannot read %s: %v", configFile, err)
+		log.Fatalf("Cannot read %s: %v", configFile, err)
 	}
 
 	hackerWecker.Speak("Good morning, hacker!")
