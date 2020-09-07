@@ -14,7 +14,7 @@ type Feed struct {
 	Items []string
 }
 
-func FetchFeeds(config Config, outputChan chan<- Feed) {
+func FetchFeeds(outputChan chan<- Feed) {
 	// Fetch the contents of all feeds, parse and filter them
 	inputChan := make(chan fetchResult)
 

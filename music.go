@@ -53,7 +53,7 @@ func playMp3(filename string) {
 	}
 }
 
-func PlayMusic(config Config) {
+func PlayMusic() {
 	// Collect music files from given music dirs, if desired play randomly otherwise sequentially numberOfTracks
 	var musicFiles []string
 	var numberOfTracks int

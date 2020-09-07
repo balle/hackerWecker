@@ -14,10 +14,11 @@ type Config struct {
 	Shuffle        bool
 }
 
+var config Config
+
 func ReadConfig(configFile string) (Config, error) {
 	// Read the config file encoded in JSON
 	// Return a Config struct
-	config := Config{}
 	fh, err := os.Open(configFile)
 
 	if err == nil {
