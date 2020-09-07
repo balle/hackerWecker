@@ -29,7 +29,7 @@ func FetchFeeds(rssFeeds map[string]map[string][]string) map[string]string {
 	return content
 }
 
-func ParseFeed(url string, content string) *gofeed.Feed {
+func ParseFeed(url string, content string) (*gofeed.Feed, error) {
 	// Parse an RSS feed
 	parser := gofeed.NewParser()
 
@@ -40,7 +40,7 @@ func ParseFeed(url string, content string) *gofeed.Feed {
 		feed = nil
 	}
 
-	return feed
+	return feed, err
 }
 
 func FilterFeed(text string, metaData map[string][]string) bool {

@@ -3,7 +3,6 @@ package hackerWecker
 
 import (
 	"encoding/json"
-	"log"
 	"os"
 )
 
@@ -14,22 +13,16 @@ type Config struct {
 	Shuffle        bool
 }
 
-func ReadConfig(feedFile string) Config {
+func ReadConfig(configFile string) (Config, error) {
 	// Read the config file encoded in JSON
 	// Return a Config struct
-	fh, err := os.Open(feedFile)
-
-	if err != nil {
-		log.Fatal("Cannot read %s: %v", feedFile, err)
-	}
-
-	decoder := json.NewDecoder(fh)
 	config := Config{}
-	err = decoder.Decode(&config)
+	fh, err := os.Open(configFile)
 
-	if err != nil {
-		log.Printf("Error decoding config: %v\n", err)
+	if err == nil {
+		decoder := json.NewDecoder(fh)
+		err = decoder.Decode(&config)
 	}
 
-	return config
+	return config, err
 }

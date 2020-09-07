@@ -2,6 +2,7 @@
 package main
 
 import (
+	"log"
 	"os"
 	"time"
 
@@ -15,7 +16,12 @@ func main() {
 		configFile = os.Args[1]
 	}
 
-	config := hackerWecker.ReadConfig(configFile)
+	config, err := hackerWecker.ReadConfig(configFile)
+
+	if err != nil {
+		log.Fatal("Cannot read %s: %v", configFile, err)
+	}
+
 	contents := hackerWecker.FetchFeeds(config.Feeds)
 
 	hackerWecker.Speak("Good morning, hacker!")
@@ -24,9 +30,9 @@ func main() {
 	hackerWecker.Speak("Here are the news of the day.")
 
 	for url, content := range contents {
-		feed := hackerWecker.ParseFeed(url, content)
+		feed, err := hackerWecker.ParseFeed(url, content)
 
-		if feed != nil {
+		if err == nil {
 			hackerWecker.ReadFeed(feed, config.Feeds[url])
 			time.Sleep(1 * time.Second)
 		}
