@@ -3,6 +3,7 @@ package hackerWecker
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 )
 
@@ -21,7 +22,10 @@ func ReadConfig(configFile string) (Config, error) {
 
 	if err == nil {
 		decoder := json.NewDecoder(fh)
-		err = decoder.Decode(&config)
+
+		if err = decoder.Decode(&config); err != nil {
+			err = fmt.Errorf("parsing JSON format in file %s: %v", configFile, err)
+		}
 	}
 
 	return config, err
