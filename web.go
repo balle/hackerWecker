@@ -20,11 +20,15 @@ func FetchUrl(url string, channel chan<- FetchResult) {
 	// Get url and return fetchResult struct
 	var result FetchResult
 	result.Url = url
+	client := &http.Client{}
 	rand.Seed(time.Now().Unix() * int64(os.Getpid()) / int64(os.Getppid()))
 
 	for tries := 0; tries < 3; tries++ {
 		fmt.Printf("Getting URL %s\n", url)
-		resp, err := http.Get(url)
+		req, _ := http.NewRequest("GET", url, nil)
+		req.Header.Set("User-Agent", "Mozilla/5.0 (X11; OpenBSD amd64; rv:76.0) Gecko/20100101 Firefox/76.0")
+
+		resp, err := client.Do(req)
 		defer resp.Body.Close()
 
 		if err != nil {
