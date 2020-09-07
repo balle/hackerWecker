@@ -29,6 +29,20 @@ func FetchFeeds(rssFeeds map[string]map[string][]string) map[string]string {
 	return content
 }
 
+func ParseFeed(url string, content string) *gofeed.Feed {
+	// Parse an RSS feed
+	parser := gofeed.NewParser()
+
+	feed, err := parser.ParseString(content)
+
+	if err != nil {
+		Speak(fmt.Sprintf("Cannot parse feed from %s: %v\n", url, err))
+		feed = nil
+	}
+
+	return feed
+}
+
 func FilterFeed(text string, metaData map[string][]string) bool {
 	// Check if the feed should be read regarding to the include and exclude filters
 	readFeed := true
