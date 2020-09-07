@@ -11,7 +11,7 @@ import (
 func Speak(text string) {
 	// Filter the feed by using include / exclude metadata
 	// Read the feed with help of a TTS tool
-	ttsCmd := exec.Command("/usr/local/bin/espeak", "-a", "120", "-s", "150", "-v", "en-us")
+	ttsCmd := exec.Command(config.TtsCmd, config.TtsParams)
 	stdin, err := ttsCmd.StdinPipe()
 	defer stdin.Close()
 

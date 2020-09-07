@@ -12,6 +12,8 @@ type Config struct {
 	MusicDirs      []string
 	NumberOfTracks int
 	Shuffle        bool
+	TtsCmd         string
+	TtsParams      string
 }
 
 var config Config
