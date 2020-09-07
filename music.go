@@ -81,7 +81,7 @@ func PlayMusic(musicDirs []string, numberOfTracks int, shuffle bool) {
 		var playFile string
 
 		if shuffle {
-			rand.Seed(time.Now().Unix())
+			rand.Seed(time.Now().Unix() * int64(os.Getpid()) / int64(os.Getppid()))
 			x := rand.Intn(len(musicFiles))
 			playFile = musicFiles[x]
 			musicFiles = remove(musicFiles, x)
