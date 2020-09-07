@@ -20,7 +20,7 @@
 	{ "include": ["open source", "ghidra", "gdb", "ida pro", "tutorial", "tip", "trick", "introduction", "mobile", "tool"]}
     },
 
-    "music": ["/home/basti/Musik/hacker_wecker"],
+    "musicDirs": ["/home/basti/Musik/hacker_wecker"],
 
     "numberOfTracks": 1,
 

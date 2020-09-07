@@ -53,34 +53,37 @@ func PlayMp3(filename string) {
 	}
 }
 
-func PlayMusic(musicDirs []string, numberOfTracks int, shuffle bool) {
+func PlayMusic(config Config) {
 	// Collect music files from given music dirs, if desired play randomly otherwise sequentially numberOfTracks
 	var musicFiles []string
+	var numberOfTracks int
 
-	for i := range musicDirs {
-		fh, err := os.Open(musicDirs[i])
+	for i := range config.MusicDirs {
+		fh, err := os.Open(config.MusicDirs[i])
 		defer fh.Close()
 
 		dirList, err := fh.Readdir(-1)
 
 		if err != nil {
-			Speak(fmt.Sprintf("Sorry cannot read directory %s: %v", musicDirs[i], err))
+			Speak(fmt.Sprintf("Sorry cannot read directory %s: %v", config.MusicDirs[i], err))
 			continue
 		}
 
 		for x := range dirList {
-			musicFiles = append(musicFiles, path.Join(musicDirs[i], dirList[x].Name()))
+			musicFiles = append(musicFiles, path.Join(config.MusicDirs[i], dirList[x].Name()))
 		}
 	}
 
-	if len(musicFiles) < numberOfTracks {
+	if len(musicFiles) < config.NumberOfTracks {
 		numberOfTracks = len(musicFiles)
+	} else {
+		numberOfTracks = config.NumberOfTracks
 	}
 
 	for i := 0; i < numberOfTracks; i++ {
 		var playFile string
 
-		if shuffle {
+		if config.Shuffle {
 			rand.Seed(time.Now().Unix() * int64(os.Getpid()) / int64(os.Getppid()))
 			x := rand.Intn(len(musicFiles))
 			playFile = musicFiles[x]

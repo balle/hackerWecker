@@ -26,7 +26,7 @@ func main() {
 
 	channel := make(chan hackerWecker.FeedResult)
 	go hackerWecker.FetchFeeds(config, channel)
-	hackerWecker.PlayMusic(config.Music, config.NumberOfTracks, config.Shuffle)
+	hackerWecker.PlayMusic(config)
 
 	hackerWecker.Speak("Here are the news of the day.")
 

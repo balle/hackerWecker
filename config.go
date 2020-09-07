@@ -9,7 +9,7 @@ import (
 
 type Config struct {
 	Feeds          map[string]map[string][]string
-	Music          []string
+	MusicDirs      []string
 	NumberOfTracks int
 	Shuffle        bool
 }
