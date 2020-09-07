@@ -1,13 +1,24 @@
+// hackerWecker config file
 {
-    "feeds": { "https://rss.packetstormsecurity.com/files/":
+    // RSS feeds
+    // Each feed can have a include and / or exclude list of strings that must
+    // or should not be contained in the title of the feed to filter interessting things
+    "feeds": {
+	       "https://rss.packetstormsecurity.com/files/":
 	       { "include": ["Execution", "injection", "Go", "Python"],
-		   "exclude": ["Security Note", "Advisory"]},
+		 "exclude": ["Security Note", "Advisory"]},
 
 	       "https://blog.golang.org/feed.atom":
 	       { "include": ["Best", "Performance", "Parallel", "Compatible"]}
 	     },
 
+    // List of folders containing mp3 files to be played
+    // Subfolders are not supported
     "music": ["/home/basti/Musik/hacker_wecker"],
+
+    // Number of mp3 files to play
     "numberOfTracks": 3,
+
+    // Play mp3 files sequentially or random?
     "shuffle": true
 }
