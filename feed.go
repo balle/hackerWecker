@@ -13,19 +13,19 @@ import (
 type Feed struct {
 	Url   string
 	Title string
-	Items []string
+	Items map[string]string
 }
 
-func FetchFeeds(outputChan chan<- Feed) {
+func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 	// Fetch the contents of all feeds, parse and filter them
 	inputChan := make(chan fetchResult)
 	maxAge := time.Now().AddDate(0, 0, config.MaxAgeOfFeedsInDays*-1)
 
-	for url, _ := range config.Feeds {
+	for url, _ := range feeds {
 		go fetchUrl(url, inputChan)
 	}
 
-	for i := 0; i < len(config.Feeds); i++ {
+	for i := 0; i < len(feeds); i++ {
 		input := <-inputChan
 		feed, err := parseFeed(input.Url, input.Content)
 		var result Feed
@@ -33,12 +33,13 @@ func FetchFeeds(outputChan chan<- Feed) {
 		if err == nil {
 			result.Title = feed.Title
 			result.Url = input.Url
+			result.Items = make(map[string]string)
 
 			for _, item := range feed.Items {
 				if ((item.UpdatedParsed == nil && item.PublishedParsed != nil && item.PublishedParsed.Unix() > maxAge.Unix()) ||
 					(item.UpdatedParsed != nil && item.UpdatedParsed.Unix() > maxAge.Unix())) &&
 					filterFeed(input.Url, item.Title) {
-					result.Items = append(result.Items, item.Title)
+					result.Items[item.Link] = item.Title
 				} else if item.PublishedParsed == nil && item.UpdatedParsed == nil {
 					log.Printf("skipping item without timestamp %s %s\n", feed.Title, item.Title)
 				}
@@ -96,8 +97,8 @@ func ReadFeed(feed Feed) {
 	if len(feed.Items) > 0 {
 		Speak(feed.Title)
 
-		for _, item := range feed.Items {
-			Speak(item)
+		for _, title := range feed.Items {
+			Speak(title)
 		}
 
 		fmt.Println()

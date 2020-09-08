@@ -19,15 +19,8 @@ func remove(slice []string, i int) []string {
 	return slice[:len(slice)-1]
 }
 
-func playMp3(filename string) {
-	// Decode mp3 file and send it to the audio device
-	fh, err := os.Open(filename)
-	defer fh.Close()
-
-	if err != nil {
-		Speak(fmt.Sprintf("Sorry cannot open %s: %v", filename, err))
-	}
-
+func playMp3FromFilehandle(fh io.Reader, filename string) {
+	// Decode MP3 from filehandle and send it to the audio device
 	decoder, err := mp3.NewDecoder(fh)
 
 	if err != nil {
@@ -51,6 +44,18 @@ func playMp3(filename string) {
 		Speak(fmt.Sprintf("Sorry cannot play %s: %v", filename, err))
 		return
 	}
+}
+
+func playMp3(filename string) {
+	// Open mp3 file, decode it and send it to the audio device
+	fh, err := os.Open(filename)
+	defer fh.Close()
+
+	if err != nil {
+		Speak(fmt.Sprintf("Sorry cannot open %s: %v", filename, err))
+	}
+
+	playMp3FromFilehandle(fh, filename)
 }
 
 func PlayMusic() {
@@ -95,4 +100,20 @@ func PlayMusic() {
 		fmt.Printf("Playing %s\n", playFile)
 		playMp3(playFile)
 	}
+}
+
+func PlayPodcast(feed Feed) {
+	// Stream Podcast mp3 to audio device
+	for url, title := range feed.Items {
+		fmt.Printf("Playing podcast %s\n", title)
+
+		client, req := initWebReq(url)
+		resp, err := client.Do(req)
+		defer resp.Body.Close()
+
+		if err == nil {
+			playMp3FromFilehandle(resp.Body, "podcast "+title)
+		}
+	}
+
 }

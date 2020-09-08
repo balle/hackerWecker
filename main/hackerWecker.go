@@ -24,16 +24,26 @@ func main() {
 
 	hackerWecker.Speak("Good morning, hacker!")
 
-	channel := make(chan hackerWecker.Feed)
-	go hackerWecker.FetchFeeds(channel)
-	hackerWecker.PlayMusic()
+	chanFeeds := make(chan hackerWecker.Feed)
+	go hackerWecker.FetchFeeds(config.Feeds, chanFeeds)
 
+	chanPodcasts := make(chan hackerWecker.Feed)
+	go hackerWecker.FetchFeeds(config.Podcasts, chanPodcasts)
+
+	hackerWecker.PlayMusic()
 	hackerWecker.Speak("Here are the news of the day.")
 
 	for i := 0; i < len(config.Feeds); i++ {
-		feed := <-channel
+		feed := <-chanFeeds
 
 		hackerWecker.ReadFeed(feed)
+		time.Sleep(1 * time.Second)
+	}
+
+	for i := 0; i < len(config.Podcasts); i++ {
+		feed := <-chanPodcasts
+
+		hackerWecker.PlayPodcast(feed)
 		time.Sleep(1 * time.Second)
 	}
 }

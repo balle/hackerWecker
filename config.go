@@ -14,9 +14,11 @@ type Config struct {
 	MaxAgeOfFeedsInDays int
 	MusicDirs           []string
 	NumberOfTracks      int
+	Podcasts            map[string]map[string][]string
 	Shuffle             bool
 	TtsCmd              string
 	TtsParams           string
+	UserAgent           string
 }
 
 var config Config

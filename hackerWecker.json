@@ -2,7 +2,7 @@
     "ttsCmd": "/usr/local/bin/espeak",
     "ttsParams": "-a 120 -s 150 -v en-us",
 
-    "maxAgeOfFeedsInDays": 1,
+    "maxAgeOfFeedsInDays": 5,
 
     "filterVars": {
 	"var:secnews": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "hack", "root", "defcon"],
@@ -41,9 +41,15 @@
 	{ "include": ["open source", "ghidra", "gdb", "ida pro", "tutorial", "tip", "trick", "introduction", "mobile", "tool"]}
     },
 
+    "podcasts": {
+	"https://pauldotcom.libsyn.com/": {}
+    },
+
     "musicDirs": ["/home/basti/Musik/hacker_wecker"],
 
     "numberOfTracks": 1,
 
-    "shuffle": true
+    "shuffle": true,
+
+    "userAgent": "Mozilla/5.0 (X11; OpenBSD amd64; rv:76.0) Gecko/20100101 Firefox/76.0"
 }
