@@ -42,7 +42,12 @@
     },
 
     "podcasts": {
-	"https://pauldotcom.libsyn.com/": {}
+	"https://pauldotcom.libsyn.com/": {},
+	"https://aswaudio.libsyn.com/rss": {},
+	"https://chaosradio.de/feed/mp3": {},
+	"https://www.c-radar.de/feed/podcast/": {},
+	"https://rdl.de/podcast/all/35236": {},
+	"https://www.c3d2.de/pentaradio.xml": {}
     },
 
     "musicDirs": ["/home/basti/Musik/hacker_wecker"],
