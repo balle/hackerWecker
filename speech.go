@@ -26,5 +26,6 @@ func Speak(text string) {
 	}
 
 	fmt.Fprintln(stdin, text)
+	fmt.Println(text)
 	time.Sleep(time.Duration(len(text))*time.Millisecond*100 + 1*time.Second)
 }

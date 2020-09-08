@@ -98,7 +98,6 @@ func ReadFeed(feed Feed) {
 		Speak(feed.Title)
 
 		for _, item := range feed.Items {
-			fmt.Printf("Speak %s\n", item)
 			Speak(item)
 		}
 
