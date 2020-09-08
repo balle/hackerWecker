@@ -4,10 +4,17 @@
 
     "maxAgeOfFeedsInDays": 1,
 
+    "filterVars": {
+	"var:secnews": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "hack", "root", "defcon"]
+    },
+
     "feeds": {
 	"https://rss.packetstormsecurity.com/files/":
-	{ "include": ["Execution", "injection", "Go", "Python"],
+	{ "include": ["Execution", "injection", "Go", "Python", "Scapy", "hijack", "tool", "mobile"],
 	  "exclude": ["Security Note", "Advisory"]},
+
+	"https://rss.packetstormsecurity.com/news/":
+	{ "include": ["var:secnews"]},
 
 	"https://blog.golang.org/feed.atom":
 	{ "include": ["Best", "Performance", "Parallel", "Compatible"]},
@@ -18,7 +25,7 @@
 	"https://www.osnews.com/feed/": {},
 
 	"https://www.reddit.com/r/netsec.rss":
-	{ "include": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "root", "defcon"]},
+	{ "include": ["var:secnews"]},
 
 	"https://www.reddit.com/r/ReverseEngineering.rss":
 	{ "include": ["open source", "ghidra", "gdb", "ida pro", "tutorial", "tip", "trick", "introduction", "mobile", "tool"]}

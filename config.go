@@ -5,10 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strings"
 )
 
 type Config struct {
 	Feeds               map[string]map[string][]string
+	FilterVars          map[string][]string
 	MaxAgeOfFeedsInDays int
 	MusicDirs           []string
 	NumberOfTracks      int
@@ -19,8 +21,28 @@ type Config struct {
 
 var config Config
 
+func resolveVars(url string, metadata map[string][]string, option string) {
+	// Resolve filter vars in include and exclude feed options
+	if _, ok := metadata[option]; ok == true {
+		for i := range metadata[option] {
+			if strings.Contains(metadata[option][i], "var:") {
+				varName := metadata[option][i]
+
+				if _, ok := config.FilterVars[varName]; ok == true {
+					config.Feeds[url][option] = remove(config.Feeds[url][option], i)
+
+					for x := range config.FilterVars[varName] {
+						config.Feeds[url][option] = append(config.Feeds[url][option], config.FilterVars[varName][x])
+					}
+				}
+			}
+		}
+	}
+}
+
 func ReadConfig(configFile string) (Config, error) {
 	// Read the config file encoded in JSON
+	// Resolve filter vars
 	// Return a Config struct
 	fh, err := os.Open(configFile)
 
@@ -30,6 +52,11 @@ func ReadConfig(configFile string) (Config, error) {
 		if err = decoder.Decode(&config); err != nil {
 			err = fmt.Errorf("parsing JSON format in file %s: %v", configFile, err)
 		}
+	}
+
+	for url, metadata := range config.Feeds {
+		resolveVars(url, metadata, "include")
+		resolveVars(url, metadata, "exclude")
 	}
 
 	return config, err

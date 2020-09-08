@@ -1,4 +1,4 @@
-// Handle RSS feeds
+// Handle RSS and Atom feeds
 package hackerWecker
 
 import (
