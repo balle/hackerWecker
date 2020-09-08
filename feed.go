@@ -93,13 +93,15 @@ func filterFeed(url, text string) bool {
 
 func ReadFeed(feed Feed) {
 	// Read all feed items
-	fmt.Printf("////[ %s\n\n", feed.Title)
-	Speak(feed.Title)
+	if len(feed.Items) > 0 {
+		fmt.Printf("////[ %s\n\n", feed.Title)
+		Speak(feed.Title)
 
-	for _, item := range feed.Items {
-		fmt.Printf("Speak %s\n", item)
-		Speak(item)
+		for _, item := range feed.Items {
+			fmt.Printf("Speak %s\n", item)
+			Speak(item)
+		}
+
+		fmt.Println()
 	}
-
-	fmt.Println()
 }
