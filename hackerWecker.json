@@ -2,7 +2,7 @@
     "ttsCmd": "/usr/local/bin/espeak",
     "ttsParams": "-a 120 -s 150 -v en-us",
 
-    "maxAgeOfFeedsInDays": 5,
+    "maxAgeOfFeedsInDays": 1,
 
     "filterVars": {
 	"var:secnews": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "hack", "root", "defcon"],
