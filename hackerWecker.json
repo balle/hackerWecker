@@ -5,13 +5,15 @@
     "maxAgeOfFeedsInDays": 1,
 
     "filterVars": {
-	"var:secnews": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "hack", "root", "defcon"]
+	"var:secnews": ["reverse", "overflow", "remote", "backdoor", "stealth", "anonym", "keylogger", "forensic", "0day", "hijack", "hack", "root", "defcon"],
+	"var:secMlInc": ["Execution", "injection", "Go", "Python", "Scapy", "hijack", "tool", "mobile"],
+	"var:secMlExc": ["Security Note", "Advisory"]
     },
 
     "feeds": {
 	"https://rss.packetstormsecurity.com/files/":
-	{ "include": ["Execution", "injection", "Go", "Python", "Scapy", "hijack", "tool", "mobile"],
-	  "exclude": ["Security Note", "Advisory"]},
+	{ "include": ["var:secMlInc"],
+	  "exclude": ["var:secMlExc"]},
 
 	"https://rss.packetstormsecurity.com/news/":
 	{ "include": ["var:secnews"]},
@@ -23,6 +25,14 @@
 	{ "include": ["BSD", "Linux", "Linus", "Security", "Developer"]},
 
 	"https://www.osnews.com/feed/": {},
+
+	"https://seclists.org/rss/isn.rss": {},
+
+	"https://seclists.org/rss/nmap-announce.rss": {},
+
+	"https://seclists.org/rss/fulldisclosure.rss":
+	{ "include": ["var:secMlInc"],
+	  "exclude": ["var:secMlExc"]},
 
 	"https://www.reddit.com/r/netsec.rss":
 	{ "include": ["var:secnews"]},
