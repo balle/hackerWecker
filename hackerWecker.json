@@ -2,6 +2,8 @@
     "ttsCmd": "/usr/local/bin/espeak",
     "ttsParams": "-a 120 -s 150 -v en-us",
 
+    "maxAgeOfFeedsInDays": 1,
+
     "feeds": {
 	"https://rss.packetstormsecurity.com/files/":
 	{ "include": ["Execution", "injection", "Go", "Python"],
@@ -10,9 +12,8 @@
 	"https://blog.golang.org/feed.atom":
 	{ "include": ["Best", "Performance", "Parallel", "Compatible"]},
 
-	"http://rss.slashdot.org/Slashdot/slashdotBsd": {},
-
-	"http://rss.slashdot.org/Slashdot/slashdotLinux": {},
+	"http://rss.slashdot.org/Slashdot/slashdotMain":
+	{ "include": ["BSD", "Linux", "Linus", "Security", "Developer"]},
 
 	"https://www.osnews.com/feed/": {},
 

@@ -8,12 +8,13 @@ import (
 )
 
 type Config struct {
-	Feeds          map[string]map[string][]string
-	MusicDirs      []string
-	NumberOfTracks int
-	Shuffle        bool
-	TtsCmd         string
-	TtsParams      string
+	Feeds               map[string]map[string][]string
+	MaxAgeOfFeedsInDays int
+	MusicDirs           []string
+	NumberOfTracks      int
+	Shuffle             bool
+	TtsCmd              string
+	TtsParams           string
 }
 
 var config Config

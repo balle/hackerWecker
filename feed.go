@@ -3,7 +3,9 @@ package hackerWecker
 
 import (
 	"fmt"
+	"log"
 	"strings"
+	"time"
 
 	"github.com/mmcdole/gofeed"
 )
@@ -17,6 +19,7 @@ type Feed struct {
 func FetchFeeds(outputChan chan<- Feed) {
 	// Fetch the contents of all feeds, parse and filter them
 	inputChan := make(chan fetchResult)
+	maxAge := time.Now().AddDate(0, 0, config.MaxAgeOfFeedsInDays*-1)
 
 	for url, _ := range config.Feeds {
 		go fetchUrl(url, inputChan)
@@ -32,8 +35,12 @@ func FetchFeeds(outputChan chan<- Feed) {
 			result.Url = input.Url
 
 			for _, item := range feed.Items {
-				if filterFeed(input.Url, item.Title) {
+				if ((item.UpdatedParsed == nil && item.PublishedParsed != nil && item.PublishedParsed.Unix() > maxAge.Unix()) ||
+					(item.UpdatedParsed != nil && item.UpdatedParsed.Unix() > maxAge.Unix())) &&
+					filterFeed(input.Url, item.Title) {
 					result.Items = append(result.Items, item.Title)
+				} else if item.PublishedParsed == nil && item.UpdatedParsed == nil {
+					log.Printf("skipping item without timestamp %s %s\n", feed.Title, item.Title)
 				}
 			}
 		}
