@@ -30,6 +30,10 @@
 
 	"https://seclists.org/rss/nmap-announce.rss": {},
 
+	"https://blog.rapid7.com/tag/metasploit/feed/": {},
+
+	"https://www.wireshark.org/news.rss": {},
+
 	"https://seclists.org/rss/fulldisclosure.rss":
 	{ "include": ["var:secMlInc"],
 	  "exclude": ["var:secMlExc"]},
@@ -46,7 +50,6 @@
 	"https://aswaudio.libsyn.com/rss": {},
 	"https://chaosradio.de/feed/mp3": {},
 	"https://www.c-radar.de/feed/podcast/": {},
-	"https://rdl.de/podcast/all/35236": {},
 	"https://www.c3d2.de/pentaradio.xml": {}
     },
 
