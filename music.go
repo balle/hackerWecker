@@ -24,14 +24,14 @@ func playMp3FromFilehandle(fh io.Reader, filename string) {
 	decoder, err := mp3.NewDecoder(fh)
 
 	if err != nil {
-		Speak(fmt.Sprintf("Sorry cannot decode %s: %v", filename, err))
+		LogError(fmt.Sprintf("Sorry cannot decode %s: %v", filename, err))
 		return
 	}
 
 	sound, err := oto.NewContext(decoder.SampleRate(), 2, 2, 8192)
 
 	if err != nil {
-		Speak(fmt.Sprintf("Sorry create sound interface: %v", err))
+		LogError(fmt.Sprintf("Sorry create sound interface: %v", err))
 		return
 	}
 
@@ -41,7 +41,7 @@ func playMp3FromFilehandle(fh io.Reader, filename string) {
 	defer player.Close()
 
 	if _, err := io.Copy(player, decoder); err != nil {
-		Speak(fmt.Sprintf("Sorry cannot play %s: %v", filename, err))
+		LogError(fmt.Sprintf("Sorry cannot play %s: %v", filename, err))
 		return
 	}
 }
@@ -52,7 +52,8 @@ func playMp3(filename string) {
 	defer fh.Close()
 
 	if err != nil {
-		Speak(fmt.Sprintf("Sorry cannot open %s: %v", filename, err))
+		LogError(fmt.Sprintf("Sorry cannot open %s: %v", filename, err))
+		return
 	}
 
 	playMp3FromFilehandle(fh, filename)
@@ -70,7 +71,7 @@ func PlayMusic() {
 		dirList, err := fh.Readdir(-1)
 
 		if err != nil {
-			Speak(fmt.Sprintf("Sorry cannot read directory %s: %v", config.MusicDirs[i], err))
+			LogError(fmt.Sprintf("Sorry cannot read directory %s: %v", config.MusicDirs[i], err))
 			continue
 		}
 
@@ -97,7 +98,7 @@ func PlayMusic() {
 			playFile = musicFiles[i]
 		}
 
-		fmt.Printf("Playing %s\n", playFile)
+		LogInfo("Playing " + playFile)
 		playMp3(playFile)
 	}
 }
@@ -105,7 +106,7 @@ func PlayMusic() {
 func PlayPodcast(feed Feed) {
 	// Stream Podcast mp3 to audio device
 	for url, title := range feed.Items {
-		fmt.Printf("Playing podcast %s\n", title)
+		LogInfo("Playing podcast " + title)
 
 		client, req := initWebReq(url)
 		resp, err := client.Do(req)

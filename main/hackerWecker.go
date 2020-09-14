@@ -2,7 +2,7 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"time"
 
@@ -19,7 +19,7 @@ func main() {
 	config, err := hackerWecker.ReadConfig(configFile)
 
 	if err != nil {
-		log.Fatalf("Cannot read %s: %v", configFile, err)
+		hackerWecker.LogFatal(fmt.Sprintf("Cannot read %s: %v", configFile, err))
 	}
 
 	hackerWecker.Speak("Good morning, hacker!")

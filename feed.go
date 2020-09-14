@@ -3,7 +3,6 @@ package hackerWecker
 
 import (
 	"fmt"
-	"log"
 	"strings"
 	"time"
 
@@ -41,7 +40,7 @@ func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 					filterFeed(input.Url, item.Title) {
 					result.Items[item.Link] = item.Title
 				} else if item.PublishedParsed == nil && item.UpdatedParsed == nil {
-					log.Printf("skipping item without timestamp %s %s\n", feed.Title, item.Title)
+					LogInfo(fmt.Sprintf("skipping item without timestamp %s %s", feed.Title, item.Title))
 				}
 			}
 		}
@@ -57,7 +56,7 @@ func parseFeed(url string, content string) (*gofeed.Feed, error) {
 	feed, err := parser.ParseString(content)
 
 	if err != nil {
-		Speak(fmt.Sprintf("Cannot parse feed from %s: %v\n", url, err))
+		LogError(fmt.Sprintf("Cannot parse feed from %s: %v\n", url, err))
 		feed = nil
 	}
 
