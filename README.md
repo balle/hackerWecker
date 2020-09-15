@@ -6,7 +6,8 @@ Run with `go run main/hackerWecker.go`
 ## Implementation
 
 Although the tool runs on Linux, *BSD, macOS and Windows laptop or desktop I recommend implementing it on a [Rasperry Pi](https://www.raspberrypi.org/).
-Note that you need to add a better sound card via USB as the integrated one is not capable in playing music without hurting ones ears.
+
+Note that you need to add a better sound card via USB (e.g. delock) as the integrated one is not capable in playing music without hurting ones ears.
 
 To make sure that the sound is really played on the second sound card added via USB edit or create the file /etc/asound.conf with the following content:
 
