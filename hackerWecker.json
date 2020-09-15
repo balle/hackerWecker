@@ -53,7 +53,7 @@
 	"https://www.c3d2.de/pentaradio.xml": {}
     },
 
-    "musicDirs": ["/home/basti/Musik/hacker_wecker"],
+    "musicDirs": ["/home/pi/Musik/hacker_wecker"],
 
     "numberOfTracks": 1,
 
