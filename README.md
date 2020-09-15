@@ -1,7 +1,11 @@
 # hackerWecker
 A tool to wake up a hacker in the morning by creating some kind of radio show (reading computer related rss / atom news, playing some music / podcast)
 
-Run with `go run main/hackerWecker.go`
+## Requirements
+
+* [Go](https://golang.org/)
+* [Espeak](http://espeak.sourceforge.net/) (on a Raspberry Pi OS use espeak-ng)
+
 
 ## Implementation
 
@@ -33,3 +37,5 @@ To make the hackerWecker actually wake you up add a crontab line like the follow
 `# crontab -e`
 
 > 30 6 * * 1-5 cd /home/pi/hackerWecker; /usr/bin/go run main/hackerWecker.go
+
+Last but not least edit the configuration file `hackerWecker.json` to your needs and copy some MP3 files onto the Raspberry Pi.
