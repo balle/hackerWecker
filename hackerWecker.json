@@ -1,6 +1,6 @@
 {
     "ttsCmd": "/usr/local/bin/espeak",
-    "ttsParams": "-a 120 -s 150 -v en-us",
+    "ttsParams": "-a 120 -g 2 -s 120 -v en-us",
 
     "maxAgeOfFeedsInDays": 1,
 
