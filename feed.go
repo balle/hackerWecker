@@ -91,9 +91,14 @@ func filterFeed(url, text string) bool {
 	return readFeed
 }
 
-func ReadFeed(feed Feed) {
+func ReadFeed(feed Feed) int {
 	// Read all feed items
+	// Return number of read feed
+	c := 0
+
 	if len(feed.Items) > 0 {
+		c++
+
 		Speak(feed.Title)
 
 		for _, title := range feed.Items {
@@ -102,4 +107,6 @@ func ReadFeed(feed Feed) {
 
 		fmt.Println()
 	}
+
+	return c
 }
