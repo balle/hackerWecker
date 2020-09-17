@@ -107,6 +107,7 @@ func PlayPodcast(feed Feed) {
 	// Stream Podcast mp3 to audio device
 	for url, title := range feed.Items {
 		LogInfo("Playing podcast " + title)
+		Speak(feed.Title)
 
 		client, req := initWebReq(url)
 		resp, err := client.Do(req)
