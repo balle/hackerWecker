@@ -43,10 +43,9 @@ func resolveVars(url string, metadata map[string][]string, option string) {
 	}
 }
 
-func ReadConfig(configFile string) (Config, error) {
+func ReadConfig(configFile string) error {
 	// Read the config file encoded in JSON
 	// Resolve filter vars
-	// Return a Config struct
 	fh, err := os.Open(configFile)
 
 	if err == nil {
@@ -62,7 +61,15 @@ func ReadConfig(configFile string) (Config, error) {
 		resolveVars(url, metadata, "exclude")
 	}
 
-	return config, err
+	return err
+}
+
+func GetFeeds() map[string]map[string][]string {
+	return config.Feeds
+}
+
+func GetPodcasts() map[string]map[string][]string {
+	return config.Podcasts
 }
 
 func GetMsg(msg string) string {
