@@ -30,7 +30,7 @@ func main() {
 	chanPodcasts := make(chan hackerWecker.Feed)
 	go hackerWecker.FetchFeeds(hackerWecker.GetPodcasts(), chanPodcasts)
 
-	//hackerWecker.PlayMusic()
+	hackerWecker.PlayMusic()
 	hackerWecker.Speak(hackerWecker.GetMsg("news"))
 
 	for i := 0; i < len(hackerWecker.GetFeeds()); i++ {
