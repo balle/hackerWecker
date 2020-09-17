@@ -22,7 +22,7 @@ func main() {
 		hackerWecker.LogFatal(fmt.Sprintf("Cannot read %s: %v", configFile, err))
 	}
 
-	hackerWecker.Speak("Good morning, hacker!")
+	hackerWecker.Speak(hackerWecker.GetMsg("welcome"))
 
 	chanFeeds := make(chan hackerWecker.Feed)
 	go hackerWecker.FetchFeeds(config.Feeds, chanFeeds)
@@ -31,7 +31,7 @@ func main() {
 	go hackerWecker.FetchFeeds(config.Podcasts, chanPodcasts)
 
 	hackerWecker.PlayMusic()
-	hackerWecker.Speak("Here are the news of the day.")
+	hackerWecker.Speak(hackerWecker.GetMsg("news"))
 
 	for i := 0; i < len(config.Feeds); i++ {
 		feed := <-chanFeeds
@@ -46,4 +46,6 @@ func main() {
 		hackerWecker.PlayPodcast(feed)
 		time.Sleep(1 * time.Second)
 	}
+
+	hackerWecker.Speak(hackerWecker.GetMsg("finished"))
 }

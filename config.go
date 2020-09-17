@@ -12,6 +12,7 @@ type Config struct {
 	Feeds               map[string]map[string][]string
 	FilterVars          map[string][]string
 	MaxAgeOfFeedsInDays int
+	Messages            map[string]string
 	MusicDirs           []string
 	NumberOfTracks      int
 	Podcasts            map[string]map[string][]string
@@ -62,4 +63,8 @@ func ReadConfig(configFile string) (Config, error) {
 	}
 
 	return config, err
+}
+
+func GetMsg(msg string) string {
+	return config.Messages[msg]
 }
