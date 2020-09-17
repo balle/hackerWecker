@@ -11,6 +11,7 @@ import (
 
 func main() {
 	configFile := "hackerWecker.json"
+	readFeeds := 0
 
 	if len(os.Args) > 1 {
 		configFile = os.Args[1]
@@ -34,17 +35,18 @@ func main() {
 	hackerWecker.Speak(hackerWecker.GetMsg("news"))
 
 	for i := 0; i < len(hackerWecker.GetFeeds()); i++ {
-		feed := <-chanFeeds
-
-		hackerWecker.ReadFeed(feed)
+		readFeeds += hackerWecker.ReadFeed(<-chanFeeds)
 		time.Sleep(1 * time.Second)
 	}
 
-	for i := 0; i < len(hackerWecker.GetPodcasts()); i++ {
-		feed := <-chanPodcasts
+	if readFeeds == 0 {
+		hackerWecker.Speak(hackerWecker.GetMsg("nonews"))
+	}
 
-		hackerWecker.PlayPodcast(feed)
-		time.Sleep(1 * time.Second)
+	hackerWecker.Speak(hackerWecker.GetMsg("podcasts"))
+
+	for i := 0; i < len(hackerWecker.GetPodcasts()); i++ {
+		hackerWecker.PlayPodcast(<-chanPodcasts)
 	}
 
 	hackerWecker.Speak(hackerWecker.GetMsg("finished"))

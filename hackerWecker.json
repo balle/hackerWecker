@@ -64,6 +64,8 @@
     "messages":
     { "welcome": "SYN. Good morning, hacker!",
       "news": "ACK. Here are the news of the day.",
+      "nonews": "Oh wait. There are no news.",
+      "podcasts": "Searching for podcasts",
       "finished": "FIN. Hack the planet! And have a nice day!"
     }
 }
