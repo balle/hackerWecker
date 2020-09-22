@@ -2,25 +2,22 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/balle/hackerWecker"
 )
 
 func main() {
-	configFile := "hackerWecker.json"
+	var configFile = flag.String("config", "hackerWecker.json", "config file")
 	readFeeds := 0
 
-	if len(os.Args) > 1 {
-		configFile = os.Args[1]
-	}
-
-	err := hackerWecker.ReadConfig(configFile)
+	flag.Parse()
+	err := hackerWecker.ReadConfig(*configFile)
 
 	if err != nil {
-		hackerWecker.LogFatal(fmt.Sprintf("Cannot read %s: %v", configFile, err))
+		hackerWecker.LogFatal(fmt.Sprintf("Cannot read %s: %v", *configFile, err))
 	}
 
 	hackerWecker.Speak(hackerWecker.GetMsg("welcome"))
