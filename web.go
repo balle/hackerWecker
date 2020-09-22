@@ -35,12 +35,12 @@ func fetchUrl(url string, channel chan<- fetchResult) {
 		fmt.Printf("Getting URL %s\n", url)
 		client, req := initWebReq(url)
 		resp, err := client.Do(req)
-		defer resp.Body.Close()
 
 		if err != nil {
 			Speak(fmt.Sprintf("Error getting url %s: %v\n", url, err))
 			result.Error = err
 		} else {
+			defer resp.Body.Close()
 			content, err := ioutil.ReadAll(resp.Body)
 
 			if err != nil {
