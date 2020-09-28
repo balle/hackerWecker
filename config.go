@@ -64,14 +64,6 @@ func ReadConfig(configFile string) error {
 	return err
 }
 
-func GetFeeds() map[string]map[string][]string {
-	return config.Feeds
-}
-
-func GetPodcasts() map[string]map[string][]string {
-	return config.Podcasts
-}
-
 func GetMsg(msg string) string {
 	return config.Messages[msg]
 }

@@ -110,3 +110,19 @@ func ReadFeed(feed Feed) int {
 
 	return c
 }
+
+func GetFeeds() map[string]map[string][]string {
+	return config.Feeds
+}
+
+func NumFeeds() int {
+	return len(config.Feeds)
+}
+
+func GetPodcasts() map[string]map[string][]string {
+	return config.Podcasts
+}
+
+func NumPodcasts() int {
+	return len(config.Podcasts)
+}
