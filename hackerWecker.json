@@ -50,7 +50,8 @@
 	"https://aswaudio.libsyn.com/rss": {},
 	"https://chaosradio.de/feed/mp3": {},
 	"https://www.c-radar.de/feed/podcast/": {},
-	"https://www.c3d2.de/pentaradio.xml": {}
+	"https://www.c3d2.de/pentaradio.xml": {},
+	"https://changelog.com/gotime/feed": {}
     },
 
     "musicDirs": ["/home/pi/Musik/hacker_wecker"],
