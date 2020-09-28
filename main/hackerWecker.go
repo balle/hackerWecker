@@ -11,9 +11,6 @@ import (
 
 func main() {
 	var configFile = flag.String("config", "hackerWecker.json", "config file")
-	var noMusic = flag.Bool("nomusic", false, "dont play music")
-	var noNews = flag.Bool("nonews", false, "dont read news")
-	var noPodcasts = flag.Bool("nopodcasts", false, "dont play podcasts")
 	var feeds []hackerWecker.Feed
 
 	flag.Parse()
@@ -28,41 +25,30 @@ func main() {
 
 	hackerWecker.Speak(hackerWecker.GetMsg("welcome"))
 
-	if !*noNews {
-		go hackerWecker.FetchFeeds(hackerWecker.GetFeeds(), chanFeeds)
+	go hackerWecker.FetchFeeds(hackerWecker.GetFeeds(), chanFeeds)
+	go hackerWecker.FetchFeeds(hackerWecker.GetPodcasts(), chanPodcasts)
+
+	hackerWecker.PlayMusic()
+
+	for i := 0; i < hackerWecker.NumFeeds(); i++ {
+		feeds = append(feeds, <-chanFeeds)
 	}
 
-	if !*noPodcasts {
-		go hackerWecker.FetchFeeds(hackerWecker.GetPodcasts(), chanPodcasts)
-	}
+	if len(feeds) == 0 {
+		hackerWecker.Speak(hackerWecker.GetMsg("nonews"))
+	} else {
+		hackerWecker.Speak(hackerWecker.GetMsg("news"))
 
-	if !*noMusic {
-		go hackerWecker.PlayMusic()
-	}
-
-	if !*noNews {
-		for i := 0; i < hackerWecker.NumFeeds(); i++ {
-			feeds = append(feeds, <-chanFeeds)
-		}
-
-		if len(feeds) == 0 {
-			hackerWecker.Speak(hackerWecker.GetMsg("nonews"))
-		} else {
-			hackerWecker.Speak(hackerWecker.GetMsg("news"))
-
-			for _, feed := range feeds {
-				hackerWecker.ReadFeed(feed)
-				time.Sleep(1 * time.Second)
-			}
+		for _, feed := range feeds {
+			hackerWecker.ReadFeed(feed)
+			time.Sleep(1 * time.Second)
 		}
 	}
 
-	if !*noPodcasts {
-		hackerWecker.Speak(hackerWecker.GetMsg("podcasts"))
+	hackerWecker.Speak(hackerWecker.GetMsg("podcasts"))
 
-		for i := 0; i < len(hackerWecker.GetPodcasts()); i++ {
-			hackerWecker.PlayPodcast(<-chanPodcasts)
-		}
+	for i := 0; i < hackerWecker.NumPodcasts(); i++ {
+		hackerWecker.PlayPodcast(<-chanPodcasts)
 	}
 
 	hackerWecker.Speak(hackerWecker.GetMsg("finished"))
