@@ -26,26 +26,29 @@ func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 
 	for i := 0; i < len(feeds); i++ {
 		input := <-inputChan
-		feed, err := parseFeed(input.Url, input.Content)
-		var result Feed
 
-		if err == nil {
-			result.Title = feed.Title
-			result.Url = input.Url
-			result.Items = make(map[string]string)
+		go func(outputChan chan<- Feed) {
+			feed, err := parseFeed(input.Url, input.Content)
+			var result Feed
 
-			for _, item := range feed.Items {
-				if ((item.UpdatedParsed == nil && item.PublishedParsed != nil && item.PublishedParsed.Unix() > maxAge.Unix()) ||
-					(item.UpdatedParsed != nil && item.UpdatedParsed.Unix() > maxAge.Unix())) &&
-					filterFeed(input.Url, item.Title) {
-					result.Items[item.Link] = item.Title
-				} else if item.PublishedParsed == nil && item.UpdatedParsed == nil {
-					LogInfo(fmt.Sprintf("skipping item without timestamp %s %s", feed.Title, item.Title))
+			if err == nil {
+				result.Title = feed.Title
+				result.Url = input.Url
+				result.Items = make(map[string]string)
+
+				for _, item := range feed.Items {
+					if ((item.UpdatedParsed == nil && item.PublishedParsed != nil && item.PublishedParsed.Unix() > maxAge.Unix()) ||
+						(item.UpdatedParsed != nil && item.UpdatedParsed.Unix() > maxAge.Unix())) &&
+						filterFeed(input.Url, item.Title) {
+						result.Items[item.Link] = item.Title
+					} else if item.PublishedParsed == nil && item.UpdatedParsed == nil {
+						LogInfo(fmt.Sprintf("skipping item without timestamp %s %s", feed.Title, item.Title))
+					}
 				}
 			}
-		}
 
-		outputChan <- result
+			outputChan <- result
+		}(outputChan)
 	}
 }
 
