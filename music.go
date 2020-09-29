@@ -20,6 +20,32 @@ func remove(slice []string, i int) []string {
 	return slice[:len(slice)-1]
 }
 
+func dirWalk(dir string) []string {
+	var files []string
+
+	fh, err := os.Open(dir)
+	defer fh.Close()
+
+	dirList, err := fh.Readdir(-1)
+
+	if err != nil {
+		LogError(fmt.Sprintf("Sorry cannot read directory %s: %v", dir, err))
+		return files
+	}
+
+	for _, entry := range dirList {
+		if entry.IsDir() {
+			for _, x := range dirWalk(filepath.Join(dir, entry.Name())) {
+				files = append(files, x)
+			}
+		} else {
+			files = append(files, path.Join(dir, entry.Name()))
+		}
+	}
+
+	return files
+}
+
 func playMp3FromFilehandle(fh io.Reader, filename string) {
 	// Decode MP3 from filehandle and send it to the audio device
 	decoder, err := mp3.NewDecoder(fh)
@@ -73,19 +99,9 @@ func PlayMusic() {
 		musicDirs = append(musicDirs, filepath.Join(home, "Music", "hackerWecker"))
 	}
 
-	for i := range musicDirs {
-		fh, err := os.Open(config.MusicDirs[i])
-		defer fh.Close()
-
-		dirList, err := fh.Readdir(-1)
-
-		if err != nil {
-			LogError(fmt.Sprintf("Sorry cannot read directory %s: %v", config.MusicDirs[i], err))
-			continue
-		}
-
-		for x := range dirList {
-			musicFiles = append(musicFiles, path.Join(config.MusicDirs[i], dirList[x].Name()))
+	for _, dir := range musicDirs {
+		for _, x := range dirWalk(dir) {
+			musicFiles = append(musicFiles, x)
 		}
 	}
 
