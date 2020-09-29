@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 
 	"github.com/hajimehoshi/go-mp3"
@@ -63,8 +64,16 @@ func PlayMusic() {
 	// Collect music files from given music dirs, if desired play randomly otherwise sequentially numberOfTracks
 	var musicFiles []string
 	var numberOfTracks int
+	var musicDirs []string
 
-	for i := range config.MusicDirs {
+	if config.MusicDirs != nil && len(config.MusicDirs) > 0 {
+		musicDirs = config.MusicDirs
+	} else {
+		home, _ := os.UserHomeDir()
+		musicDirs = append(musicDirs, filepath.Join(home, "Music", "hackerWecker"))
+	}
+
+	for i := range musicDirs {
 		fh, err := os.Open(config.MusicDirs[i])
 		defer fh.Close()
 
