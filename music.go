@@ -20,8 +20,10 @@ func remove(slice []string, i int) []string {
 	return slice[:len(slice)-1]
 }
 
-func dirWalk(dir string) []string {
+func dirWalk(dir string, semaphore chan int) []string {
 	var files []string
+
+	semaphore <- 1
 
 	fh, err := os.Open(dir)
 	defer fh.Close()
@@ -35,13 +37,15 @@ func dirWalk(dir string) []string {
 
 	for _, entry := range dirList {
 		if entry.IsDir() {
-			for _, x := range dirWalk(filepath.Join(dir, entry.Name())) {
+			for _, x := range dirWalk(filepath.Join(dir, entry.Name()), semaphore) {
 				files = append(files, x)
 			}
 		} else {
 			files = append(files, path.Join(dir, entry.Name()))
 		}
 	}
+
+	<-semaphore
 
 	return files
 }
@@ -99,8 +103,10 @@ func PlayMusic() {
 		musicDirs = append(musicDirs, filepath.Join(home, "Music", "hackerWecker"))
 	}
 
+	semaphore := make(chan int, 20)
+
 	for _, dir := range musicDirs {
-		for _, x := range dirWalk(dir) {
+		for _, x := range dirWalk(dir, semaphore) {
 			musicFiles = append(musicFiles, x)
 		}
 	}
