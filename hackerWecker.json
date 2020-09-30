@@ -60,12 +60,17 @@
 
     "shuffle": true,
 
+    "weatherLocation": "Zürich",
+    "weatherUnit": "metric",
+    "openWeatherAPIKey": "87536d841c50ab50fbc452ee243a66c0",
+
     "userAgent": "Mozilla/5.0 (X11; OpenBSD amd64; rv:76.0) Gecko/20100101 Firefox/76.0",
 
     "messages":
     { "welcome": "SYN. Good morning, hacker!",
       "news": "ACK. Here are the news of the day.",
       "nonews": "Oh wait. There are no news.",
+      "weather": "Todays weather:",
       "podcasts": "Searching for podcasts",
       "finished": "FIN. Hack the planet! And have a nice day!"
     }

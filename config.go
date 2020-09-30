@@ -15,10 +15,13 @@ type Config struct {
 	Messages            map[string]string
 	MusicDirs           []string
 	NumberOfTracks      int
+	OpenWeatherAPIKey   string
 	Podcasts            map[string]map[string][]string
 	Shuffle             bool
 	TtsCmd              string
 	TtsParams           string
+	WeatherLocation     string
+	WeatherUnit         string
 	UserAgent           string
 }
 

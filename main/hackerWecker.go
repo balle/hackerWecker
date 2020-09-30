@@ -45,6 +45,9 @@ func main() {
 		}
 	}
 
+	hackerWecker.Speak(hackerWecker.GetMsg("weather"))
+	hackerWecker.ReadWeather()
+
 	hackerWecker.Speak(hackerWecker.GetMsg("podcasts"))
 
 	for i := 0; i < hackerWecker.NumPodcasts(); i++ {
