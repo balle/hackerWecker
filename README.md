@@ -3,7 +3,7 @@ A tool to wake up a hacker in the morning by creating some kind of radio show (r
 
 ## Requirements
 
-* [Go](https://golang.org/)
+* [Go](https://golang.org/) 1.13 or higher
 * [Espeak](http://espeak.sourceforge.net/) (on a Raspberry Pi OS use espeak-ng)
 
 
