@@ -8,7 +8,7 @@ import (
 	"github.com/EricNeid/go-openweather"
 )
 
-const unknownTemp int = 9999999999
+const unknownTemp int = 99999
 
 type Weather struct {
 	Description string
