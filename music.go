@@ -103,7 +103,7 @@ func PlayMusic() {
 		musicDirs = append(musicDirs, filepath.Join(home, "Music", "hackerWecker"))
 	}
 
-	semaphore := make(chan int, 20)
+	semaphore := make(chan int, config.NumberOfThreads)
 
 	for _, dir := range musicDirs {
 		for _, x := range dirWalk(dir, semaphore) {

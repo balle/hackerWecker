@@ -14,6 +14,7 @@ type Config struct {
 	MaxAgeOfFeedsInDays int
 	Messages            map[string]string
 	MusicDirs           []string
+	NumberOfThreads     int
 	NumberOfTracks      int
 	OpenWeatherAPIKey   string
 	Podcasts            map[string]map[string][]string

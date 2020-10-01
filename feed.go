@@ -18,6 +18,7 @@ type Feed struct {
 func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 	// Fetch the contents of all feeds, parse and filter them
 	inputChan := make(chan fetchResult)
+	semaphore := make(chan int, config.NumberOfThreads)
 	maxAge := time.Now().AddDate(0, 0, config.MaxAgeOfFeedsInDays*-1)
 
 	for url, _ := range feeds {
@@ -26,6 +27,7 @@ func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 
 	for i := 0; i < len(feeds); i++ {
 		input := <-inputChan
+		semaphore <- 1
 
 		go func(outputChan chan<- Feed) {
 			feed, err := parseFeed(input.Url, input.Content)
@@ -49,6 +51,8 @@ func FetchFeeds(feeds map[string]map[string][]string, outputChan chan<- Feed) {
 
 			outputChan <- result
 		}(outputChan)
+
+		<-semaphore
 	}
 }
 

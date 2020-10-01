@@ -66,6 +66,8 @@
 
     "userAgent": "Mozilla/5.0 (X11; OpenBSD amd64; rv:76.0) Gecko/20100101 Firefox/76.0",
 
+    "numberOfThreads": 10,
+
     "messages":
     { "welcome": "SYN. Good morning, hacker!",
       "news": "ACK. Here are the news of the day.",
