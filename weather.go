@@ -70,20 +70,6 @@ func ReadWeather() {
 		Speak(fmt.Sprintf("Maximum %d %s", weather.TempMax, tempUnit))
 	}
 
-	time.Sleep(500 * time.Millisecond)
-
-	if weather.WindSpeed == 0 {
-		Speak("There is no wind")
-	} else {
-		Speak(fmt.Sprintf("Wind speed is %d", weather.WindSpeed))
-	}
-
-	if weather.Rain == 0 {
-		Speak("No rain for today")
-	} else {
-		Speak(fmt.Sprintf("There will be rain: %d", weather.Rain))
-	}
-
 	sunsetTime := time.Unix(int64(weather.Sunset), 0)
 	Speak(fmt.Sprintf("Sunset is at %d %d", sunsetTime.Hour(), sunsetTime.Minute()))
 }
