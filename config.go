@@ -16,6 +16,8 @@ type Config struct {
 	MusicDirs           []string
 	NumberOfThreads     int
 	NumberOfTracks      int
+	MixerCmd            string
+	MixerOpts           []string
 	OpenWeatherAPIKey   string
 	Podcasts            map[string]map[string][]string
 	Shuffle             bool

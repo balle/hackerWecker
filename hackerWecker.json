@@ -60,6 +60,9 @@
 
     "shuffle": true,
 
+    "mixerCmd": "amixer",
+    "mixerOpts": ["-c", "1", "sset", "Speaker", "20%"],
+    
     "weatherLocation": "Zürich",
     "weatherUnit": "metric",
     "openWeatherAPIKey": "87536d841c50ab50fbc452ee243a66c0",

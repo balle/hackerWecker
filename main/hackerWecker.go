@@ -20,6 +20,8 @@ func main() {
 		hackerWecker.LogFatal(fmt.Sprintf("Cannot read %s: %v", *configFile, err))
 	}
 
+	hackerWecker.SetupMixer()
+
 	chanFeeds := make(chan hackerWecker.Feed, hackerWecker.NumFeeds())
 	chanPodcasts := make(chan hackerWecker.Feed, hackerWecker.NumPodcasts())
 

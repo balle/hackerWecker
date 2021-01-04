@@ -6,8 +6,10 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/hajimehoshi/go-mp3"
@@ -149,4 +151,15 @@ func PlayPodcast(feed Feed) {
 		}
 	}
 
+}
+
+func SetupMixer() {
+	if config.MixerCmd != nil && config.MixerOpts != nil {
+		cmd := exec.Command(config.MixerCmd, strings.Join(config.MixerOpts, ","))
+		err := cmd.Run()
+
+		if err != nil {
+			LogError(fmt.Sprintf("Cannot execute mixer command: %v", err))
+		}
+	}
 }
