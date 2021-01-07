@@ -154,7 +154,7 @@ func PlayPodcast(feed Feed) {
 }
 
 func SetupMixer() {
-	if config.MixerCmd != nil && config.MixerOpts != nil {
+	if config.MixerCmd != "" && len(config.MixerOpts) > 0 {
 		cmd := exec.Command(config.MixerCmd, strings.Join(config.MixerOpts, ","))
 		err := cmd.Run()
 
